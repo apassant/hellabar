@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>HellaBar</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="./dist/css/bootstrap.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="./assets/style.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	  <script src="../../assets/js/html5shiv.js"></script>
+	  <script src="../../assets/js/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body ng-controller="AppCtrl" ng-cloack>
+
+	<div id="fb-root"></div>
+
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">HellaBar</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a data-toggle="modal" href="#myModal">About</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</div>
+
+  <div class="container">
+
+    <!-- index view -->
+    <section ng-hide="map">
+      <div class="starter-template">
+        <h1>HellaBar</h1>
+        <p class="lead">
+          Get hella bars, pubs and clubs recommendations based on the music you like.<br/>
+        </p>
+        <div ng-hide="loading">
+          <button type="button" class="btn btn-primary btn-login" ng-click="login();">Log-in with Facebook</button>
+          <br/>
+          <br/>
+          <p>We do not store any personal information from your Facebook profile</p>
+        </div>
+        <div class="progress progress-striped active" ng-show="loading">
+          <div class="progress-bar" role="progressbar" style="width: 100%">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- map view -->
+    <section ng-show="map">
+      <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-9">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+          <div class="jumbotron">
+            <div class="container">
+              <p ng-show="genre"><b>{{genre}}</b>: {{artists}}</p>
+              <p ng-show="!genre">Pick a genre on the right to find venues</p>
+              <div id="map-canvas"/>
+            </div>
+          </div>
+        </div><!--/span-->
+      </div>
+      <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+        <div class="well sidebar-nav">
+          <ul class="nav">
+            <li ng-repeat="(genre, data) in genres" ng-class="{active: genre.active}"><a href="#" ng-click="loadVenues(genre, data)">{{data.name}}</a></li>
+          </ul>
+        </div><!--/.well -->
+      </div><!--/span-->
+    </section><!--/row-->
+
+  </div><!-- /.container -->
+  
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">About XXX</h4>
+        </div>
+        <div class="modal-body">
+          <p>
+          XXX lets you discover venues (pubs, bars, clubs) in San Francisco and Oakland based on the artists you like on Facebook.</br>
+          It has been built in 24h at Hella Hack Oakland by <a>Oscar Celma</a> (<a>Gracetenote</a>) and <a>Alexandre Passant</a> (<a>seevl.fm</a> / <a>MDG<a/>), using APIs from <a>Facebook</a>, <a>Gracenote</a>, <a>Yelp</a> and <a>Google Maps</a>, and with a little help from <a>Python</a> and <a>AngularJS</a>.<br/>
+          Source code is available on github
+          </p> 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+	<script src="./assets/app.js"></script>
+	<script src="./dist/js/bootstrap.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSo15Sciwk-hiXOdXCliZ3F4YLg1JiC4E&sensor=false"></script>
+	<script>
+		window.fbAsyncInit = function() {
+		FB.init({
+			appId : '531674166916777'
+		});
+	};
+
+	// Load the SDK asynchronously
+	(function(d, s, id){
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/en_US/all.js";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+	</script>
+
+
+</body>
+
+</html>
