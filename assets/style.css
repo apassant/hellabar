@@ -4,6 +4,9 @@
   margin: auto;
 }
 
+small {
+  font-size: 70% !important;
+}
 .infoWindow {
   min-width: 350px !important;
 }

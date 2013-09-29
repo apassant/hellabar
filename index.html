@@ -78,7 +78,7 @@
             <div class="container">
               <p ng-show="genre"><b>{{genre}}</b>
                 <span ng-repeat="artist in artists">
-                  <a href="#" ng-click="playRadio(artist)">{{artist.metadata.name}}</a><span ng-show="!$last">, </span><span ng-show="$last">.</span>
+                  <a href="#" ng-click="playRadio(artist)">{{artist.metadata.name}}</a> <small>[{{artist.metadata.genre2}}]</small
                 </span>
               </p>
               <p ng-show="!genre">Pick a genre on the right to find venues</p>
