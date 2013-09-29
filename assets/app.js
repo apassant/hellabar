@@ -40,35 +40,36 @@ function AppCtrl($scope) {
                     if(artist['score'] > 0.9) {
                         // Add to the genre dictionary
                         var skip = new Array();
-                        var genre = String(artist.metadata.genre1);
-                        var artist = artist['metadata']['name']
-                        if(genre) {
-                            // First time, get venues and skip genre if nothing found
-                            if($scope.genres[genre] == undefined && skip.indexOf(genre) == -1) {
-                                $.get('./assets/genres.json', function(data) {
-                                    venues = data[genre];
-                                    if(venues) {
-                                        $scope.genres[genre] = {
-                                            'name' : genre.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-                                                return letter.toUpperCase();
-                                            }),
-                                            'active' : false,
-                                            'artists' : new Array(artist),
-                                            'venues' : venues
-                                        };
-                                    } else {
-                                        skip.push(genre);
+                        $.each(new Array('genre1', 'genre2'), function(index, value) {
+                            var genre = String(artist['metadata'][value]);
+                            if(genre) {
+                                // First time, get venues and skip genre if nothing found
+                                if($scope.genres[genre] == undefined && skip.indexOf(genre) == -1) {
+                                    $.get('./assets/genres.json', function(data) {
+                                        venues = data[genre];
+                                        if(venues) {
+                                            $scope.genres[genre] = {
+                                                'name' : genre.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                                                    return letter.toUpperCase();
+                                                }),
+                                                'active' : false,
+                                                'artists' : new Array(artist['metadata']['name']),
+                                                'venues' : venues
+                                            };
+                                        } else {
+                                            skip.push(genre);
+                                        }
+                                    });
+                                } else {
+                                    if($scope.genres[genre]['artists'].indexOf(artist['metadata']['name']) == -1) {
+                                        $scope.genres[genre]['artists'].push(artist['metadata']['name']);
                                     }
-                                });
-                            } else {
-                                if($scope.genres[genre]['artists'].indexOf(artist) == -1) {
-                                    $scope.genres[genre]['artists'].push(artist);
                                 }
                             }
-                        }
-                        $scope.$$phase || $scope.$apply();
+                            $scope.$$phase || $scope.$apply();
+                        });
                     }
-                })
+                });
             }
         });
         // Paginate or return callback
