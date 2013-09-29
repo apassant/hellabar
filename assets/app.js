@@ -40,7 +40,7 @@ function AppCtrl($scope) {
                     if(artist['score'] > 0.9) {
                         // Add to the genre dictionary
                         var skip = new Array();
-                        $.each(new Array('genre1', 'genre2'), function(index, value) {
+                        $.each(new Array('genre1'), function(index, value) {
                             var genre = String(artist['metadata'][value]);
                             if(genre) {
                                 // First time, get venues and skip genre if nothing found
@@ -66,8 +66,8 @@ function AppCtrl($scope) {
                                     }
                                 }
                             }
-                            $scope.$$phase || $scope.$apply();
                         });
+                        $scope.$$phase || $scope.$apply();
                     }
                 });
             }
