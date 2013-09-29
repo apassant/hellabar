@@ -40,8 +40,8 @@ function AppCtrl($scope) {
                     if(artist['score'] > 0.9) {
                         // Add to the genre dictionary
                         var skip = new Array();
-//                        $.each(new Array('genre1', 'genre2'), function(index, value) {
                         var genre = String(artist.metadata.genre1);
+                        var artist = artist['metadata']['name']
                         if(genre) {
                             // First time, get venues and skip genre if nothing found
                             if($scope.genres[genre] == undefined && skip.indexOf(genre) == -1) {
@@ -61,10 +61,11 @@ function AppCtrl($scope) {
                                     }
                                 });
                             } else {
-                                $scope.genres[genre]['artists'].push(artist)
+                                if($scope.genres[genre]['artists'].indexOf(artist) == -1) {
+                                    $scope.genres[genre]['artists'].push(artist);
+                                }
                             }
                         }
-//                        });
                         $scope.$$phase || $scope.$apply();
                     }
                 })
@@ -155,9 +156,7 @@ function AppCtrl($scope) {
         this.clearVenues();
         this.showVenues(data['venues']);
         $scope.genre = data['name'];
-        $scope.artists = $.map(data['artists'], function(value, index) {
-            return value['metadata']['name']
-        }).join(', ');
+        $scope.artists = data['artists'].join(', ');
     }
 }
 
