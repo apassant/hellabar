@@ -53,16 +53,17 @@ function AppCtrl($scope) {
                                                     return letter.toUpperCase();
                                                 }),
                                                 'active' : false,
-                                                'artists' : new Array(artist['metadata']['name']),
+                                                'artists' : {},
                                                 'venues' : venues
                                             };
+                                            $scope.genres[genre]['artists'][artist['id']] = artist;
                                         } else {
                                             skip.push(genre);
                                         }
                                     });
                                 } else {
-                                    if($scope.genres[genre]['artists'].indexOf(artist['metadata']['name']) == -1) {
-                                        $scope.genres[genre]['artists'].push(artist['metadata']['name']);
+                                    if($scope.genres[genre]['artists'][artist['id']] == undefined) {
+                                        $scope.genres[genre]['artists'][artist['id']] = artist;
                                     }
                                 }
                             }
@@ -147,6 +148,11 @@ function AppCtrl($scope) {
         })
     };
     
+    $scope.playRadio = function(artist) {
+        var url = "https://mtl.gracenote.com/rest-ws/artist/" + artist.id + "/radio?format=html";
+        newwindow = window.open(url, 'Radio', 'height=640,width=640');
+    };
+    
     $scope.loadVenues = function(genre, data) {
         // Activate link
         $.each($scope.genres, function(index, value) {
@@ -157,7 +163,7 @@ function AppCtrl($scope) {
         this.clearVenues();
         this.showVenues(data['venues']);
         $scope.genre = data['name'];
-        $scope.artists = data['artists'].join(', ');
+        $scope.artists = data['artists'];
     }
 }
 
