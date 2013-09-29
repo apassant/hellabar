@@ -4,6 +4,10 @@
   margin: auto;
 }
 
+.infoWindow {
+  width: 350px !important;
+}
+
 .infoWindow a {
   font-weight: bold !important;
 }
