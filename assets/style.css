@@ -4,6 +4,10 @@
   margin: auto;
 }
 
+.navbar-brand {
+  background: url('assets/hellabar.png');
+}
+
 small {
   font-size: 70% !important;
 }

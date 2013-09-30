@@ -30,13 +30,13 @@ cities = {
     },
 }
 
-for data in ['genres', 'venues']:
-    for city in cities.keys():
+for city in cities.keys():
+    for data in ['genres', 'venues']:
         f = open("%s/%s/%s.json" %(data_folder, city, data), 'r')
         cities[city].update({
-            'data' : json.loads(f.read())
+            data : json.loads(f.read())
         })
         f.close()
-    f = file("%s.json" %(data), 'w')
-    f.write(json.dumps(cities))
-    f.close()
+f = file("data.json", 'w')
+f.write(json.dumps(cities))
+f.close()

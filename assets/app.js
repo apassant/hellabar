@@ -1,13 +1,26 @@
+////////////////////////////////////////////////
 // Bootstrap offcanvas
+////////////////////////////////////////////////
 $(document).ready(function() {
   $('[data-toggle=offcanvas]').click(function() {
     $('.row-offcanvas').toggleClass('active');
   });
 });
 
+////////////////////////////////////////////////
 // Angular App
+////////////////////////////////////////////////
 function AppCtrl($scope) {
   
+    $scope.cities = new Array(
+        'oakland',
+        'sf',
+        'ny'
+    );
+
+    ////////////////////////////////////////////////
+    // Login
+    ////////////////////////////////////////////////
     $scope.login = function() {
         var self = this;
         FB.login(function(response) {
@@ -25,7 +38,45 @@ function AppCtrl($scope) {
         }, {scope: 'user_likes'});
     };
     
+    ////////////////////////////////////////////////
+    // Data
+    ////////////////////////////////////////////////
+    
+    $scope.getGenres = function(artist) {// Add to the genre dictionary
+        var skip = new Array();
+        $.each(new Array('genre1'), function(index, value) {
+            var genre = String(artist['metadata'][value]);
+            if(genre) {
+                // First time, get venues and skip genre if nothing found
+                if($scope.genres[genre] == undefined && skip.indexOf(genre) == -1) {
+                    $.get('./json/cities/' + $scope.city + '/genres.json', function(data) {
+                        venues = data[genre];
+                        if(venues) {
+                            $scope.genres[genre] = {
+                                'name' : genre.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                                    return letter.toUpperCase();
+                                }),
+                                'active' : false,
+                                'artists' : {},
+                                'venues' : venues
+                            };
+                            $scope.genres[genre]['artists'][artist['id']] = artist;
+                        } else {
+                            skip.push(genre);
+                        }
+                    }); 
+                } else {
+                    if($scope.genres[genre]['artists'][artist['id']] == undefined) {
+                        $scope.genres[genre]['artists'][artist['id']] = artist;
+                    }
+                }
+            }
+        });
+        $scope.$$phase || $scope.$apply();
+    };
+    
     $scope.getArtists = function(data, callback) {
+        var self = this;
         // Parse data
         $.each(data['data'], function(index, value) {
             // Get only artists
@@ -38,37 +89,7 @@ function AppCtrl($scope) {
                     var artist = data['response'][0];
                     // Only correctly identified artists
                     if(artist['score'] > 0.9) {
-                        // Add to the genre dictionary
-                        var skip = new Array();
-                        $.each(new Array('genre1'), function(index, value) {
-                            var genre = String(artist['metadata'][value]);
-                            if(genre) {
-                                // First time, get venues and skip genre if nothing found
-                                if($scope.genres[genre] == undefined && skip.indexOf(genre) == -1) {
-                                    $.get('./assets/genres.json', function(data) {
-                                        venues = data[genre];
-                                        if(venues) {
-                                            $scope.genres[genre] = {
-                                                'name' : genre.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-                                                    return letter.toUpperCase();
-                                                }),
-                                                'active' : false,
-                                                'artists' : {},
-                                                'venues' : venues
-                                            };
-                                            $scope.genres[genre]['artists'][artist['id']] = artist;
-                                        } else {
-                                            skip.push(genre);
-                                        }
-                                    });
-                                } else {
-                                    if($scope.genres[genre]['artists'][artist['id']] == undefined) {
-                                        $scope.genres[genre]['artists'][artist['id']] = artist;
-                                    }
-                                }
-                            }
-                        });
-                        $scope.$$phase || $scope.$apply();
+                        self.getGenres(artist);
                     }
                 });
             }
@@ -85,6 +106,10 @@ function AppCtrl($scope) {
         }
     };
     
+    ////////////////////////////////////////////////
+    // Map
+    ////////////////////////////////////////////////
+    
     $scope.loadMap = function() {
         // Need to get data from here to add points
         var mapOptions = {
@@ -93,7 +118,7 @@ function AppCtrl($scope) {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         // Get data from venues
-        $.get('./assets/venues.json', function(data) {
+        $.get('./json/cities/' + $scope.city + '/venues.json', function(data) {
             $scope.venues = data;
             // Display once it's loaded
             $scope.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
@@ -148,11 +173,6 @@ function AppCtrl($scope) {
         })
     };
     
-    $scope.playRadio = function(artist) {
-        var url = "https://mtl.gracenote.com/rest-ws/artist/" + artist.id + "/radio?format=html";
-        newwindow = window.open(url, 'Radio', 'height=640,width=640');
-    };
-    
     $scope.loadVenues = function(genre, data) {
         // Activate link
         $.each($scope.genres, function(index, value) {
@@ -164,7 +184,17 @@ function AppCtrl($scope) {
         this.showVenues(data['venues']);
         $scope.genre = data['name'];
         $scope.artists = data['artists'];
-    }
+    };
+    
+    ////////////////////////////////////////////////
+    // Player
+    ////////////////////////////////////////////////
+    
+    $scope.playRadio = function(artist) {
+        var url = "https://mtl.gracenote.com/rest-ws/artist/" + artist.id + "/radio?format=html";
+        newwindow = window.open(url, 'Radio', 'height=640,width=640');
+    };
+    
 }
 
 
