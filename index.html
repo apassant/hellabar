@@ -55,12 +55,16 @@
           Get hella bars, pubs and clubs recommendations based on the music you like.<br/>
         </p>
         <div ng-hide="loading">
-          Pick a city first:
-          <select ng-model="city" ng-options="city for city in cities">{{city}}</select><br>
-          <button type="button" class="btn btn-primary btn-login" ng-click="login();">Log-in with Facebook</button>
-          <br/>
-          <br/>
-          <p>We do not store any personal information from your Facebook profile</p>
+          <div>
+            Pick a city first:
+            <select ng-model="city" ng-options="city for city in cities">{{city}}</select><br>
+          </div>
+          <div ng-show="city">
+            <button type="button" class="btn btn-primary btn-login" ng-click="login();">Log-in with Facebook</button>
+            <br/>
+            <br/>
+            <p>We do not store any personal information from your Facebook profile</p>
+          </div>
         </div>
         <div class="progress progress-striped active" ng-show="loading">
           <div class="progress-bar" role="progressbar" style="width: 100%">
