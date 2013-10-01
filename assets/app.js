@@ -160,7 +160,7 @@ function AppCtrl($scope) {
                 }
                 // Create content
                 var link = '<a href="' + venue.url + '" target="_blank">';
-                var content = '<p>'+ link + venue.name + '</a> plays ' + venue.genres.join(', ') + '.</p>';
+                var content = '<p>'+ link + venue.name + '</a><small>(' +  venue.category + ')</small></p><p>Plays ' + venue.genres.join(', ') + '.</p>';
                 if(venue.image) {
                     content = link + '<img class="pic" src="' + venue.image + '"></a>' + content;
                 }
