@@ -1,0 +1,23 @@
+{
+    'ny' : {
+        'name' : 'New York',
+        'coordinates' : {
+            'lat' : 40.7143528,
+            'long' : -74.00597309999999
+        }
+    }, 
+    'oakland' : {
+        'name' : 'Oakland',
+        'coordinates' : {
+            'lat' : 37.8043637,
+            'long' : -122.2711137
+        }
+    }, 
+    'sf' : {
+        'name' : 'San Francisco',
+        'coordinates' : {
+            'lat' : 37.7749295,
+            'long' : -122.4194155
+        }
+    },
+}
