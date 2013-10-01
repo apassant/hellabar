@@ -46,7 +46,6 @@
 	</div>
 
   <div class="container">
-
     <!-- index view -->
     <section ng-hide="map">
       <div class="starter-template">
@@ -57,7 +56,7 @@
         <div ng-hide="loading">
           <div>
             Pick a city first:
-            <select ng-model="city" ng-options="city for city in cities">{{city}}</select><br>
+            <select ng-model="city" ng-options="city as city.name for city in cities"/><br>
           </div>
           <div ng-show="city">
             <button type="button" class="btn btn-primary btn-login" ng-click="login();">Log-in with Facebook</button>

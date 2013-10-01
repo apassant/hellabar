@@ -12,11 +12,10 @@ $(document).ready(function() {
 ////////////////////////////////////////////////
 function AppCtrl($scope) {
   
-    $scope.cities = new Array(
-        'oakland',
-        'sf',
-        'ny'
-    );
+    $.get('./json/cities.json', function(data) {
+        $scope.cities = data;
+        $scope.$$phase || $scope.$apply();
+    });
 
     ////////////////////////////////////////////////
     // Login
@@ -49,7 +48,7 @@ function AppCtrl($scope) {
             if(genre) {
                 // First time, get venues and skip genre if nothing found
                 if($scope.genres[genre] == undefined && skip.indexOf(genre) == -1) {
-                    $.get('./json/cities/' + $scope.city + '/genres.json', function(data) {
+                    $.get('./json/cities/' + $scope.city['id'] + '/genres.json', function(data) {
                         venues = data[genre];
                         if(venues) {
                             $scope.genres[genre] = {
@@ -118,7 +117,7 @@ function AppCtrl($scope) {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         // Get data from venues
-        $.get('./json/cities/' + $scope.city + '/venues.json', function(data) {
+        $.get('./json/cities/' + $scope.city['id'] + '/venues.json', function(data) {
             $scope.venues = data;
             // Display once it's loaded
             $scope.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
