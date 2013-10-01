@@ -16,7 +16,8 @@ small {
   font-size: 70% !important;
 }
 .infoWindow {
-  min-width: 350px !important;
+  width: 300px !important;
+  min-height: 110px !important;
 }
 
 .infoWindow a {
