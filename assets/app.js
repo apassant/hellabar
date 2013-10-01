@@ -28,7 +28,10 @@ function AppCtrl($scope) {
                 $scope.$$phase || $scope.$apply();
                 // Get facebook links, extract artists, and run mapping with gracenote
                 FB.api('/me/likes', function(data) {
-                    $scope.genres = {};
+                    $scope.genres = {
+                        'genre1' : {},
+                        'genre2' : {}
+                    };
                     self.getArtists(data, function() {
                         self.loadMap();
                     });
@@ -43,15 +46,15 @@ function AppCtrl($scope) {
     
     $scope.getGenres = function(artist) {// Add to the genre dictionary
         var skip = new Array();
-        $.each(new Array('genre1'), function(index, value) {
+        $.each(new Array('genre1', 'genre2'), function(index, value) {
             var genre = String(artist['metadata'][value]);
             if(genre) {
                 // First time, get venues and skip genre if nothing found
-                if($scope.genres[genre] == undefined && skip.indexOf(genre) == -1) {
+                if($scope.genres[value][genre] == undefined && skip.indexOf(genre) == -1) {
                     $.get('./json/cities/' + $scope.city['id'] + '/genres.json', function(data) {
                         venues = data[genre];
                         if(venues) {
-                            $scope.genres[genre] = {
+                            $scope.genres[value][genre] = {
                                 'name' : genre.toLowerCase().replace(/\b[a-z]/g, function(letter) {
                                     return letter.toUpperCase();
                                 }),
@@ -59,14 +62,14 @@ function AppCtrl($scope) {
                                 'artists' : {},
                                 'venues' : venues
                             };
-                            $scope.genres[genre]['artists'][artist['id']] = artist;
+                            $scope.genres[value][genre]['artists'][artist['id']] = artist;
                         } else {
                             skip.push(genre);
                         }
                     }); 
                 } else {
-                    if($scope.genres[genre]['artists'][artist['id']] == undefined) {
-                        $scope.genres[genre]['artists'][artist['id']] = artist;
+                    if($scope.genres[value][genre]['artists'][artist['id']] == undefined) {
+                        $scope.genres[value][genre]['artists'][artist['id']] = artist;
                     }
                 }
             }
@@ -174,7 +177,10 @@ function AppCtrl($scope) {
     
     $scope.loadVenues = function(genre, data) {
         // Activate link
-        $.each($scope.genres, function(index, value) {
+        $.each($scope.genres['genre1'], function(index, value) {
+            value.active = false;
+        })
+        $.each($scope.genres['genre2'], function(index, value) {
             value.active = false;
         })
         data.active = true;
