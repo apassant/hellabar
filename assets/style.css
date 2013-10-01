@@ -8,6 +8,10 @@
   background: url('assets/hellabar.png');
 }
 
+button {
+  margin-bottom: 10px !important;
+}
+
 small {
   font-size: 70% !important;
 }

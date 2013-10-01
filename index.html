@@ -56,12 +56,10 @@
         <div ng-hide="loading">
           <div>
             Pick a city first:
-            <select ng-model="city" ng-options="city as city.name for city in cities"/><br>
+            <select ng-model="city" ng-options="city as city.name for city in cities"></select><br/>
           </div>
           <div ng-show="city">
             <button type="button" class="btn btn-primary btn-login" ng-click="login();">Log-in with Facebook</button>
-            <br/>
-            <br/>
             <p>We do not store any personal information from your Facebook profile</p>
           </div>
         </div>
