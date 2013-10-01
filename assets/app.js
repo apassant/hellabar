@@ -115,7 +115,7 @@ function AppCtrl($scope) {
     $scope.loadMap = function() {
         // Need to get data from here to add points
         var mapOptions = {
-            center: new google.maps.LatLng(37.8044, -122.2708),
+            center: new google.maps.LatLng($scope.city.coordinates.lat, $scope.city.coordinates.long),
             zoom: 12,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
