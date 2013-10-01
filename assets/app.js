@@ -85,7 +85,7 @@ function AppCtrl($scope) {
             if(value['category'] == 'Musician/band') {
                 // Filter and get metadata through GraceNote API
                 var name = value['name']
-                var query = name.split(' ').join('+');
+                var query = name.replace('(official)', '').split(' ').join('+');
                 var url = "https://mtl.gracenote.com/rest-ws/artist/search?q=name:" + query + "&format=jsonp&field=all&callback=?&APIKEY=hellahack2013";
                 $.getJSON(url, function(data) {
                     var artist = data['response'][0];
